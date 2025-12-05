@@ -1,0 +1,88 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-image",
+      "description": "Elegant hero background image",
+      "imageUrl": "https://images.unsplash.com/photo-1643237251986-c0bde5848c5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZWxlZ2FudCUyMGpld2Vscnl8ZW58MHx8fHwxNzY0ODMzMzczfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "elegant jewelry"
+    },
+    {
+      "id": "swiss-category",
+      "description": "Image for the Swiss watches category",
+      "imageUrl": "https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjB3YXRjaHxlbnwwfHx8fDE3NjQ4MTg1MDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury watch"
+    },
+    {
+      "id": "japanese-category",
+      "description": "Image for the Japanese watches category",
+      "imageUrl": "https://images.unsplash.com/photo-1662724174411-06358407f6c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtb2Rlcm4lMjB3YXRjaHxlbnwwfHx8fDE3NjQ4MzMzNzR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern watch"
+    },
+    {
+      "id": "other-category",
+      "description": "Image for the Other watches category",
+      "imageUrl": "https://images.unsplash.com/photo-1758521541129-c8df5581acaf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzbWFydHdhdGNoJTIwZmFzaGlvbnxlbnwwfHx8fDE3NjQ3ODMyNzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "smartwatch fashion"
+    },
+    {
+      "id": "rolex",
+      "description": "Placeholder image for Rolex watch",
+      "imageUrl": "https://images.unsplash.com/photo-1662384197911-e82189f4dc60?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxyb2xleCUyMHdhdGNofGVufDB8fHx8MTc2NDgzMzM3M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "rolex watch"
+    },
+    {
+      "id": "omega",
+      "description": "Placeholder image for Omega watch",
+      "imageUrl": "https://images.unsplash.com/photo-1674208884812-cdc0b4bc1cf0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxvbWVnYSUyMHdhdGNofGVufDB8fHx8MTc2NDgzMzM3NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "omega watch"
+    },
+    {
+      "id": "patek-philippe",
+      "description": "Placeholder image for Patek Philippe watch",
+      "imageUrl": "https://images.unsplash.com/photo-1663564307102-6df750b2196b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwYXRlayUyMHdhdGNofGVufDB8fHx8MTc2NDgzMzM3NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "patek watch"
+    },
+    {
+      "id": "tag-heuer",
+      "description": "Placeholder image for Tag Heuer watch",
+      "imageUrl": "https://images.unsplash.com/photo-1704265586142-db3e17d0dea0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0YWclMjBoZXVlciUyMHdhdGNofGVufDB8fHx8MTc2NDgzMzM3M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "tag heuer watch"
+    },
+    {
+      "id": "breitling",
+      "description": "Placeholder image for Breitling watch",
+      "imageUrl": "https://images.unsplash.com/photo-1548171916-c0dea7f94ca6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxicmVpdGxpbmclMjB3YXRjaHxlbnwwfHx8fDE3NjQ4MzMzNzR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "breitling watch"
+    },
+    {
+      "id": "seiko",
+      "description": "Placeholder image for Seiko watch",
+      "imageUrl": "https://images.unsplash.com/photo-1587541400752-f039557ea8c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzZWlrbyUyMHdhdGNofGVufDB8fHx8MTc2NDgzMzM3NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "seiko watch"
+    },
+    {
+      "id": "casio",
+      "description": "Placeholder image for Casio watch",
+      "imageUrl": "https://images.unsplash.com/photo-1646125633134-4e31c783d2df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjYXNpbyUyMHdhdGNofGVufDB8fHx8MTc2NDgzMzM3NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "casio watch"
+    },
+    {
+      "id": "citizen",
+      "description": "Placeholder image for Citizen watch",
+      "imageUrl": "https://images.unsplash.com/photo-1611353230196-d43954b19316?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaXRpemVuJTIwd2F0Y2h8ZW58MHx8fHwxNzY0ODMzMzc0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "citizen watch"
+    },
+    {
+      "id": "apple",
+      "description": "Placeholder image for Apple watch",
+      "imageUrl": "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YXBwbGUlMjB3YXRjaHxlbnwwfHx8fDE3NjQ4MzMzNzR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "apple watch"
+    },
+    {
+      "id": "fossil",
+      "description": "Placeholder image for Fossil watch",
+      "imageUrl": "https://images.unsplash.com/photo-1698512475185-4a6223bb9685?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Zm9zc2lsJTIwd2F0Y2h8ZW58MHx8fHwxNzY0ODMzMzc0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fossil watch"
+    }
+  ]
+}

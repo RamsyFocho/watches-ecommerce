@@ -32,7 +32,7 @@ export default function CartSheet({ open, onOpenChange }: CartSheetProps) {
   const { cart, removeFromCart, updateCartQuantity } = useAppContext();
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -63,7 +63,9 @@ export default function CartSheet({ open, onOpenChange }: CartSheetProps) {
                     </div>
                     <div className="flex-1">
                       <h3 className="font-semibold text-base">{item.name}</h3>
-                      <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {typeof item.price === 'number' ? `$${item.price.toFixed(2)}` : 'Price not available'}
+                      </p>
                       <div className="mt-2 flex items-center gap-2">
                         <Select
                           value={String(item.quantity)}
@@ -83,7 +85,9 @@ export default function CartSheet({ open, onOpenChange }: CartSheetProps) {
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-2">
-                       <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                       <p className="font-semibold">
+                        {typeof item.price === 'number' ? `$${(item.price * item.quantity).toFixed(2)}` : ''}
+                       </p>
                        <Button variant="ghost" size="icon" onClick={() => removeFromCart(item.id)}>
                         <X className="h-5 w-5" />
                       </Button>

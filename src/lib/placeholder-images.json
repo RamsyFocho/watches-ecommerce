@@ -43,6 +43,12 @@
       "imageHint": "patek watch"
     },
     {
+      "id": "patek-philippe-calatrava",
+      "description": "Placeholder image for Patek Philippe Calatrava watch",
+      "imageUrl": "https://images.unsplash.com/photo-1629429448833-28f4c4244983?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwYXRlayUyMHBoaWxpcHBlJTIwY2FsYXRyYXZhfGVufDB8fHx8MTc2NTQxMjUwOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "patek calatrava"
+    },
+    {
       "id": "tag-heuer",
       "description": "Placeholder image for Tag Heuer watch",
       "imageUrl": "https://images.unsplash.com/photo-1704265586142-db3e17d0dea0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0YWclMjBoZXVlciUyMHdhdGNofGVufDB8fHx8MTc2NDgzMzM3M3ww&ixlib=rb-4.1.0&q=80&w=1080",

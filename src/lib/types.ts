@@ -7,6 +7,7 @@ export type Product = {
   category: 'Swiss' | 'Japanese' | 'Other';
   description: string;
   longDescription: string;
+  price: number;
   image: (typeof PlaceHolderImages)[number];
   isTrending: boolean;
   brand: string;

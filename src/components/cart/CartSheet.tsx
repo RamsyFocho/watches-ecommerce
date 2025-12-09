@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/context/AppContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { X, Eye, Minus, Plus } from "lucide-react";
+import { X, Eye } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -32,6 +32,7 @@ export default function CartSheet({ open, onOpenChange }: CartSheetProps) {
   const { cart, removeFromCart, updateCartQuantity } = useAppContext();
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -62,7 +63,7 @@ export default function CartSheet({ open, onOpenChange }: CartSheetProps) {
                     </div>
                     <div className="flex-1">
                       <h3 className="font-semibold text-base">{item.name}</h3>
-                      <p className="text-sm text-muted-foreground">{item.category}</p>
+                      <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
                       <div className="mt-2 flex items-center gap-2">
                         <Select
                           value={String(item.quantity)}
@@ -82,11 +83,7 @@ export default function CartSheet({ open, onOpenChange }: CartSheetProps) {
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-2">
-                       <Button asChild variant="ghost" size="icon">
-                         <Link href={`/products/${item.slug}`} onClick={() => onOpenChange(false)}>
-                            <Eye className="h-5 w-5" />
-                         </Link>
-                       </Button>
+                       <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
                        <Button variant="ghost" size="icon" onClick={() => removeFromCart(item.id)}>
                         <X className="h-5 w-5" />
                       </Button>
@@ -98,8 +95,14 @@ export default function CartSheet({ open, onOpenChange }: CartSheetProps) {
           </ScrollArea>
         </div>
         {cart.length > 0 && (
-            <SheetFooter className="p-6 pt-4 mt-auto border-t">
-            <Button className="w-full" size="lg">Checkout</Button>
+            <SheetFooter className="p-6 pt-4 mt-auto border-t space-y-4">
+              <div className="flex justify-between font-semibold">
+                <span>Subtotal</span>
+                <span>${subtotal.toFixed(2)}</span>
+              </div>
+              <Button asChild className="w-full" size="lg" onClick={() => onOpenChange(false)}>
+                 <Link href="/checkout">Checkout</Link>
+              </Button>
           </SheetFooter>
         )}
       </SheetContent>

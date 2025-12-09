@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Gem, Heart, Menu, ShoppingCart } from "lucide-react";
+import { Gem, Heart, Menu, ShoppingCart, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
@@ -75,6 +75,12 @@ export default function Header() {
               )}
               <span className="sr-only">Cart</span>
             </Button>
+             <Button asChild size="sm" className="hidden sm:flex">
+                <Link href="/checkout">
+                    <CreditCard className="mr-2 h-4 w-4"/>
+                    Checkout
+                </Link>
+             </Button>
             <Sheet open={isMobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="md:hidden">
@@ -100,6 +106,13 @@ export default function Header() {
                       {link.label}
                     </Link>
                   ))}
+                   <Separator />
+                    <Button asChild size="sm" onClick={() => setMobileMenuOpen(false)}>
+                        <Link href="/checkout">
+                            <CreditCard className="mr-2 h-4 w-4"/>
+                            Checkout
+                        </Link>
+                    </Button>
                 </div>
               </SheetContent>
             </Sheet>

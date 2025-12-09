@@ -11,6 +11,7 @@ import WishlistSheet from "../wishlist/WishlistSheet";
 import ProductSearch from "../shared/ProductSearch";
 import { useState } from "react";
 import { ThemeToggle } from "./ThemeToggle";
+import { Separator } from "../ui/separator";
 
 const navLinks = [
   { href: "/", label: "Home" },

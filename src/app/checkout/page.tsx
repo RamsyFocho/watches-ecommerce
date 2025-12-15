@@ -12,6 +12,7 @@ import { CreditCard, Banknote, Gift, Smartphone } from 'lucide-react';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { handlePlaceOrder } from '../actions/send-order-email';
+import { useRouter } from 'next/navigation';
 
 type PaymentDetails = {
   cardNumber?: string;
@@ -28,16 +29,8 @@ type PaymentDetails = {
 export default function CheckoutPage() {
   const { cart, removeFromCart } = useAppContext();
   const { toast } = useToast();
+  const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState('card');
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    address: '',
-    city: '',
-    state: '',
-    zip: '',
-  });
-  const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -45,21 +38,31 @@ export default function CheckoutPage() {
   const taxes = subtotal * 0.08;
   const total = subtotal + shipping + taxes;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-  };
-
-  const handlePaymentDetailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setPaymentDetails(prev => ({ ...prev, [id]: value }));
-  };
-
-  const formAction = async (formDataPayload: FormData) => {
+  const formAction = async (formData: FormData) => {
     setIsSubmitting(true);
     
+    const customerData = {
+        name: formData.get('name') as string,
+        email: formData.get('email') as string,
+        address: formData.get('address') as string,
+        city: formData.get('city') as string,
+        state: formData.get('state') as string,
+        zip: formData.get('zip') as string,
+    };
+
+    const paymentDetailsData: PaymentDetails = {
+        cardNumber: formData.get('cardNumber')?.toString(),
+        expiryDate: formData.get('expiryDate')?.toString(),
+        cvc: formData.get('cvc')?.toString(),
+        paypalEmail: formData.get('paypalEmail')?.toString(),
+        zelleEmail: formData.get('zelleEmail')?.toString(),
+        venmoHandle: formData.get('venmoHandle')?.toString(),
+        appleGiftCardCode: formData.get('appleGiftCardCode')?.toString(),
+        appleGiftCardPin: formData.get('appleGiftCardPin')?.toString(),
+    };
+    
     const orderPayload = {
-        customer: formData,
+        customer: customerData,
         items: cart.map(item => ({
           id: item.id,
           name: item.name,
@@ -76,7 +79,7 @@ export default function CheckoutPage() {
         },
         payment: {
             method: paymentMethod,
-            details: paymentDetails,
+            details: paymentDetailsData,
         }
     };
 
@@ -87,7 +90,8 @@ export default function CheckoutPage() {
             description: "Thank you for your purchase. A confirmation email has been sent.",
         });
         // Clear cart after successful order
-        cart.forEach(item => removeFromCart(item.id));
+        cart.forEach(item => removeFromCart(item.id, true)); // pass true to suppress toast
+        router.push('/');
 
     } catch (error) {
         console.error("Failed to place order:", error);
@@ -126,8 +130,6 @@ export default function CheckoutPage() {
                     id="name" 
                     name="name"
                     placeholder="John Doe" 
-                    value={formData.name}
-                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -138,8 +140,6 @@ export default function CheckoutPage() {
                     name="email"
                     type="email" 
                     placeholder="john.doe@example.com" 
-                    value={formData.email}
-                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -149,8 +149,6 @@ export default function CheckoutPage() {
                     id="address" 
                     name="address"
                     placeholder="123 Luxury Lane" 
-                    value={formData.address}
-                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -161,8 +159,6 @@ export default function CheckoutPage() {
                       id="city" 
                       name="city"
                       placeholder="Jewel City" 
-                      value={formData.city}
-                      onChange={handleInputChange}
                       required
                     />
                   </div>
@@ -172,8 +168,6 @@ export default function CheckoutPage() {
                       id="state" 
                       name="state"
                       placeholder="CA" 
-                      value={formData.state}
-                      onChange={handleInputChange}
                       required
                     />
                   </div>
@@ -183,8 +177,6 @@ export default function CheckoutPage() {
                       id="zip" 
                       name="zip"
                       placeholder="90210" 
-                      value={formData.zip}
-                      onChange={handleInputChange}
                       required
                     />
                   </div>
@@ -260,8 +252,6 @@ export default function CheckoutPage() {
                         id="cardNumber"
                         name="cardNumber" 
                         placeholder="1111 2222 3333 4444" 
-                        value={paymentDetails.cardNumber || ''}
-                        onChange={handlePaymentDetailChange}
                         required
                       />
                     </div>
@@ -272,8 +262,6 @@ export default function CheckoutPage() {
                           id="expiryDate"
                           name="expiryDate" 
                           placeholder="MM / YY" 
-                          value={paymentDetails.expiryDate || ''}
-                          onChange={handlePaymentDetailChange}
                           required
                         />
                       </div>
@@ -283,8 +271,6 @@ export default function CheckoutPage() {
                           id="cvc" 
                           name="cvc"
                           placeholder="123" 
-                          value={paymentDetails.cvc || ''}
-                          onChange={handlePaymentDetailChange}
                           required
                         />
                       </div>
@@ -301,8 +287,6 @@ export default function CheckoutPage() {
                         name="paypalEmail"
                         type="email" 
                         placeholder="paypal@example.com" 
-                        value={paymentDetails.paypalEmail || ''}
-                        onChange={handlePaymentDetailChange}
                         required
                       />
                     </div>
@@ -317,8 +301,6 @@ export default function CheckoutPage() {
                         id="zelleEmail"
                         name="zelleEmail" 
                         placeholder="email@example.com or (555) 123-4567" 
-                        value={paymentDetails.zelleEmail || ''}
-                        onChange={handlePaymentDetailChange}
                         required
                       />
                     </div>
@@ -333,8 +315,6 @@ export default function CheckoutPage() {
                         id="appleGiftCardCode"
                         name="appleGiftCardCode" 
                         placeholder="XXXX-XXXX-XXXX-XXXX" 
-                        value={paymentDetails.appleGiftCardCode || ''}
-                        onChange={handlePaymentDetailChange}
                         required
                       />
                     </div>
@@ -344,8 +324,6 @@ export default function CheckoutPage() {
                         id="appleGiftCardPin"
                         name="appleGiftCardPin"
                         placeholder="1234" 
-                        value={paymentDetails.appleGiftCardPin || ''}
-                        onChange={handlePaymentDetailChange}
                       />
                     </div>
                   </div>
@@ -359,8 +337,6 @@ export default function CheckoutPage() {
                         id="venmoHandle"
                         name="venmoHandle"
                         placeholder="@username" 
-                        value={paymentDetails.venmoHandle || ''}
-                        onChange={handlePaymentDetailChange}
                         required
                       />
                     </div>

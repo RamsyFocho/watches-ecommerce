@@ -8,7 +8,7 @@ interface AppContextType {
   cart: CartItem[];
   wishlist: Product[];
   addToCart: (product: Product) => void;
-  removeFromCart: (productId: string) => void;
+  removeFromCart: (productId: string, suppressToast?: boolean) => void;
   updateCartQuantity: (productId: string, quantity: number) => void;
   isInCart: (productId: string) => boolean;
   addToWishlist: (product: Product) => void;
@@ -60,8 +60,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const removeFromCart = (productId: string) => {
-    setCart((prev) => prev.filter((item) => item.id !== productId));
+  const removeFromCart = (productId: string, suppressToast = false) => {
+    setCart((prev) => {
+        const itemToRemove = prev.find((item) => item.id === productId);
+        if (itemToRemove && !suppressToast) {
+            toast({ title: "Removed from Cart", description: `${itemToRemove.name} has been removed from your cart.`, variant: 'destructive' });
+        }
+        return prev.filter((item) => item.id !== productId)
+    });
   };
 
   const updateCartQuantity = (productId: string, quantity: number) => {
@@ -85,8 +91,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeFromWishlist = (productId: string) => {
+    const itemToRemove = wishlist.find((item) => item.id === productId);
     setWishlist((prev) => prev.filter((item) => item.id !== productId));
-    toast({ title: "Removed from Wishlist", description: `Item has been removed from your wishlist.`, variant: 'destructive' });
+    if (itemToRemove) {
+      toast({ title: "Removed from Wishlist", description: `${itemToRemove.name} has been removed from your wishlist.`, variant: 'destructive' });
+    }
   };
   
   const isInWishlist = (productId: string) => wishlist.some((item) => item.id === productId);

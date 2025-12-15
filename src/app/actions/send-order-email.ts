@@ -59,7 +59,7 @@ function generateOrderHtml(payload: OrderPayload): string {
             </div>
           </div>
         </td>
-        <td style="padding: 12px 0; text-align: right; font-weight: 600;">$${(item.price * item.quantity).toFixed(2)}</td>
+        <td style="padding: 12px 0; text-align: right; font-weight: 600;">$${(item.subtotal).toFixed(2)}</td>
       </tr>
     `
       )

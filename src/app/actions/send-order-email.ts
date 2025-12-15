@@ -1,14 +1,14 @@
-'use server';
+"use server";
 
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
 type CartItem = {
-    id: string;
-    name: string;
-    quantity: number;
-    price: number;
-    subtotal: number;
-    imageUrl: string;
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
+  subtotal: number;
+  imageUrl: string;
 };
 
 type OrderPayload = {
@@ -30,42 +30,54 @@ type OrderPayload = {
   payment: {
     method: string;
     details: Record<string, any>;
-  }
+  };
 };
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_SERVER_USER,
-      pass: process.env.EMAIL_SERVER_PASSWORD,
-    },
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_SERVER_USER,
+    pass: process.env.EMAIL_SERVER_PASSWORD,
+  },
+});
+// Verify transporter on startup
+transporter.verify(function (error, success) {
+  if (error) {
+    console.error("❌ SMTP connection verification failed:", error);
+  } else {
+    console.log("✅ SMTP transporter is ready to send emails");
+  }
 });
 
 function generateOrderHtml(payload: OrderPayload): string {
-    const { customer, items, summary } = payload;
-  
-    const itemsHtml = items
-      .map(
-        (item) => `
+  const { customer, items, summary } = payload;
+
+  const itemsHtml = items
+    .map(
+      (item) => `
       <tr style="border-bottom: 1px solid #e5e7eb;">
         <td style="padding: 12px 0;">
           <div style="display: flex; align-items: center;">
-            <img src="${item.imageUrl}" alt="${item.name}" width="64" height="64" style="border-radius: 8px; margin-right: 16px;">
+            <img src="${item.imageUrl}" alt="${
+        item.name
+      }" width="64" height="64" style="border-radius: 8px; margin-right: 16px;">
             <div>
               <p style="font-weight: 600; margin: 0;">${item.name}</p>
-              <p style="font-size: 0.875rem; color: #6b7280; margin: 4px 0 0;">Qty: ${item.quantity}</p>
+              <p style="font-size: 0.875rem; color: #6b7280; margin: 4px 0 0;">Qty: ${
+                item.quantity
+              }</p>
             </div>
           </div>
         </td>
-        <td style="padding: 12px 0; text-align: right; font-weight: 600;">$${(item.subtotal).toFixed(2)}</td>
+        <td style="padding: 12px 0; text-align: right; font-weight: 600;">$${item.subtotal.toFixed(
+          2
+        )}</td>
       </tr>
     `
-      )
-      .join('');
-  
-    return `
+    )
+    .join("");
+
+  return `
       <!DOCTYPE html>
       <html>
       <head>
@@ -94,14 +106,24 @@ function generateOrderHtml(payload: OrderPayload): string {
               ${itemsHtml}
             </table>
             <table style="width: 100%; margin-top: 24px;">
-              <tr><td style="padding: 4px 0;">Subtotal:</td><td style="padding: 4px 0; text-align: right;">$${summary.subtotal}</td></tr>
-              <tr><td style="padding: 4px 0;">Shipping:</td><td style="padding: 4px 0; text-align: right;">$${summary.shipping}</td></tr>
-              <tr><td style="padding: 4px 0; border-bottom: 1px solid #e5e7eb;">Taxes:</td><td style="padding: 4px 0; text-align: right; border-bottom: 1px solid #e5e7eb;">$${summary.taxes}</td></tr>
-              <tr style="font-weight: 700; font-size: 1.125rem;"><td style="padding-top: 12px;">Total:</td><td style="padding-top: 12px; text-align: right;">$${summary.total}</td></tr>
+              <tr><td style="padding: 4px 0;">Subtotal:</td><td style="padding: 4px 0; text-align: right;">$${
+                summary.subtotal
+              }</td></tr>
+              <tr><td style="padding: 4px 0;">Shipping:</td><td style="padding: 4px 0; text-align: right;">$${
+                summary.shipping
+              }</td></tr>
+              <tr><td style="padding: 4px 0; border-bottom: 1px solid #e5e7eb;">Taxes:</td><td style="padding: 4px 0; text-align: right; border-bottom: 1px solid #e5e7eb;">$${
+                summary.taxes
+              }</td></tr>
+              <tr style="font-weight: 700; font-size: 1.125rem;"><td style="padding-top: 12px;">Total:</td><td style="padding-top: 12px; text-align: right;">$${
+                summary.total
+              }</td></tr>
             </table>
             
             <h2 style="margin-top: 24px;">Shipping Information</h2>
-            <p><strong>${customer.name}</strong><br>${customer.address}<br>${customer.city}, ${customer.state} ${customer.zip}</p>
+            <p><strong>${customer.name}</strong><br>${customer.address}<br>${
+    customer.city
+  }, ${customer.state} ${customer.zip}</p>
 
           </div>
           <div class="footer">
@@ -111,29 +133,32 @@ function generateOrderHtml(payload: OrderPayload): string {
       </body>
       </html>
     `;
-  }
-  
+}
 
 export async function handlePlaceOrder(payload: OrderPayload) {
-    if (!process.env.EMAIL_SERVER_USER || !process.env.EMAIL_SERVER_PASSWORD || !process.env.EMAIL_ADMIN) {
-        throw new Error('Email server environment variables are not configured.');
-    }
-  
-    const orderHtml = generateOrderHtml(payload);
-  
-    // Send email to customer
-    await transporter.sendMail({
-      from: `"CelestialGems" <${process.env.EMAIL_SERVER_USER}>`,
-      to: payload.customer.email,
-      subject: 'Your CelestialGems Order Confirmation',
-      html: orderHtml,
-    });
-  
-    // Send email to admin
-    await transporter.sendMail({
-      from: `"CelestialGems Order System" <${process.env.EMAIL_SERVER_USER}>`,
-      to: process.env.EMAIL_ADMIN,
-      subject: `New Order Received from ${payload.customer.name}`,
-      html: orderHtml.replace('Thank You for Your Order!', 'New Order Received'),
-    });
+  if (
+    !process.env.EMAIL_SERVER_USER ||
+    !process.env.EMAIL_SERVER_PASSWORD ||
+    !process.env.EMAIL_ADMIN
+  ) {
+    throw new Error("Email server environment variables are not configured.");
+  }
+
+  const orderHtml = generateOrderHtml(payload);
+
+  // Send email to customer
+  await transporter.sendMail({
+    from: `"CelestialGems" <${process.env.EMAIL_SERVER_USER}>`,
+    to: payload.customer.email,
+    subject: "Your CelestialGems Order Confirmation",
+    html: orderHtml,
+  });
+
+  // Send email to admin
+  await transporter.sendMail({
+    from: `"CelestialGems Order System" <${process.env.EMAIL_SERVER_USER}>`,
+    to: process.env.EMAIL_ADMIN,
+    subject: `New Order Received from ${payload.customer.name}`,
+    html: orderHtml.replace("Thank You for Your Order!", "New Order Received"),
+  });
 }

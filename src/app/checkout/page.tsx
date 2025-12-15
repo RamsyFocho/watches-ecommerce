@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,8 +8,10 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { useAppContext } from '@/context/AppContext';
-import { CreditCard, DollarSign, Package, Smartphone, Gift, Banknote } from 'lucide-react';
+import { CreditCard, Banknote, Gift, Smartphone } from 'lucide-react';
 import Image from 'next/image';
+import { useToast } from '@/hooks/use-toast';
+import { handlePlaceOrder } from '../actions/send-order-email';
 
 type PaymentDetails = {
   cardNumber?: string;
@@ -20,10 +22,12 @@ type PaymentDetails = {
   zellePhone?: string;
   venmoHandle?: string;
   appleGiftCardCode?: string;
+  appleGiftCardPin?: string;
 };
 
 export default function CheckoutPage() {
-  const { cart } = useAppContext();
+  const { cart, removeFromCart } = useAppContext();
+  const { toast } = useToast();
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [formData, setFormData] = useState({
     name: '',
@@ -34,6 +38,7 @@ export default function CheckoutPage() {
     zip: '',
   });
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping = 25;
@@ -50,12 +55,10 @@ export default function CheckoutPage() {
     setPaymentDetails(prev => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    // Compile all information into a structured payload
+  const formAction = async (formDataPayload: FormData) => {
+    setIsSubmitting(true);
+    
     const orderPayload = {
-      orderDetails: {
         customer: formData,
         items: cart.map(item => ({
           id: item.id,
@@ -71,31 +74,36 @@ export default function CheckoutPage() {
           taxes: taxes.toFixed(2),
           total: total.toFixed(2),
         },
-      },
-      payment: {
-        method: paymentMethod,
-        details: paymentDetails,
-      },
-      timestamp: new Date().toISOString(),
-      orderId: `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        payment: {
+            method: paymentMethod,
+            details: paymentDetails,
+        }
     };
 
-    // Log the structured payload to console
-    console.log('Order Payload:', JSON.stringify(orderPayload, null, 2));
-    
-    // Here you would typically send this payload to your backend
-    // For now, we'll just log it and show an alert
-    alert('Order placed successfully! Check console for order details.');
-    
-    // In a real application, you would:
-    // 1. Send the payload to your API
-    // 2. Handle the response
-    // 3. Redirect to confirmation page
-    // 4. Clear the cart
+    try {
+        await handlePlaceOrder(orderPayload);
+        toast({
+            title: "Order Placed!",
+            description: "Thank you for your purchase. A confirmation email has been sent.",
+        });
+        // Clear cart after successful order
+        cart.forEach(item => removeFromCart(item.id));
+
+    } catch (error) {
+        console.error("Failed to place order:", error);
+        toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "Could not place your order. Please try again.",
+        });
+    } finally {
+        setIsSubmitting(false);
+    }
   };
 
+
   return (
-    <div className="container mx-auto px-4 py-16 sm:py-24">
+    <div className="container mx-auto px-4 py-16 sm:py-24 mb-24 lg:mb-0">
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold font-headline">Checkout</h1>
         <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
@@ -103,7 +111,7 @@ export default function CheckoutPage() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form action={formAction}>
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact and Payment Info */}
           <div className="space-y-8">
@@ -116,6 +124,7 @@ export default function CheckoutPage() {
                   <Label htmlFor="name">Full Name</Label>
                   <Input 
                     id="name" 
+                    name="name"
                     placeholder="John Doe" 
                     value={formData.name}
                     onChange={handleInputChange}
@@ -126,6 +135,7 @@ export default function CheckoutPage() {
                   <Label htmlFor="email">Email</Label>
                   <Input 
                     id="email" 
+                    name="email"
                     type="email" 
                     placeholder="john.doe@example.com" 
                     value={formData.email}
@@ -137,6 +147,7 @@ export default function CheckoutPage() {
                   <Label htmlFor="address">Shipping Address</Label>
                   <Input 
                     id="address" 
+                    name="address"
                     placeholder="123 Luxury Lane" 
                     value={formData.address}
                     onChange={handleInputChange}
@@ -148,6 +159,7 @@ export default function CheckoutPage() {
                     <Label htmlFor="city">City</Label>
                     <Input 
                       id="city" 
+                      name="city"
                       placeholder="Jewel City" 
                       value={formData.city}
                       onChange={handleInputChange}
@@ -158,6 +170,7 @@ export default function CheckoutPage() {
                     <Label htmlFor="state">State</Label>
                     <Input 
                       id="state" 
+                      name="state"
                       placeholder="CA" 
                       value={formData.state}
                       onChange={handleInputChange}
@@ -168,6 +181,7 @@ export default function CheckoutPage() {
                     <Label htmlFor="zip">ZIP Code</Label>
                     <Input 
                       id="zip" 
+                      name="zip"
                       placeholder="90210" 
                       value={formData.zip}
                       onChange={handleInputChange}
@@ -188,8 +202,8 @@ export default function CheckoutPage() {
                   value={paymentMethod}
                   onValueChange={setPaymentMethod}
                   className="space-y-4"
+                  name="paymentMethod"
                 >
-                  {/* Credit Card */}
                   <Label
                     htmlFor="payment-card"
                     className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent has-[[data-state=checked]]:border-primary"
@@ -199,7 +213,6 @@ export default function CheckoutPage() {
                     <span className="font-medium">Credit Card</span>
                   </Label>
 
-                  {/* PayPal */}
                   <Label
                     htmlFor="payment-paypal"
                     className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent has-[[data-state=checked]]:border-primary"
@@ -211,7 +224,6 @@ export default function CheckoutPage() {
                     <span className="font-medium">PayPal</span>
                   </Label>
 
-                  {/* Zelle */}
                   <Label
                     htmlFor="payment-zelle"
                     className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent has-[[data-state=checked]]:border-primary"
@@ -221,7 +233,6 @@ export default function CheckoutPage() {
                     <span className="font-medium">Zelle</span>
                   </Label>
 
-                  {/* Apple Gift Card */}
                   <Label
                     htmlFor="payment-apple-giftcard"
                     className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent has-[[data-state=checked]]:border-primary"
@@ -231,7 +242,6 @@ export default function CheckoutPage() {
                     <span className="font-medium">Apple Gift Card</span>
                   </Label>
 
-                  {/* Venmo */}
                   <Label
                     htmlFor="payment-venmo"
                     className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent has-[[data-state=checked]]:border-primary"
@@ -242,13 +252,13 @@ export default function CheckoutPage() {
                   </Label>
                 </RadioGroup>
 
-                {/* Payment Method Specific Fields */}
                 {paymentMethod === 'card' && (
                   <div className="mt-6 space-y-4 pt-4 border-t">
                     <div className="space-y-2">
                       <Label htmlFor="card-number">Card Number</Label>
                       <Input 
-                        id="cardNumber" 
+                        id="cardNumber"
+                        name="cardNumber" 
                         placeholder="1111 2222 3333 4444" 
                         value={paymentDetails.cardNumber || ''}
                         onChange={handlePaymentDetailChange}
@@ -259,7 +269,8 @@ export default function CheckoutPage() {
                       <div className="space-y-2 col-span-2">
                         <Label htmlFor="expiry-date">Expiration Date</Label>
                         <Input 
-                          id="expiryDate" 
+                          id="expiryDate"
+                          name="expiryDate" 
                           placeholder="MM / YY" 
                           value={paymentDetails.expiryDate || ''}
                           onChange={handlePaymentDetailChange}
@@ -270,6 +281,7 @@ export default function CheckoutPage() {
                         <Label htmlFor="cvc">CVC</Label>
                         <Input 
                           id="cvc" 
+                          name="cvc"
                           placeholder="123" 
                           value={paymentDetails.cvc || ''}
                           onChange={handlePaymentDetailChange}
@@ -286,6 +298,7 @@ export default function CheckoutPage() {
                       <Label htmlFor="paypal-email">PayPal Email</Label>
                       <Input 
                         id="paypalEmail" 
+                        name="paypalEmail"
                         type="email" 
                         placeholder="paypal@example.com" 
                         value={paymentDetails.paypalEmail || ''}
@@ -293,9 +306,6 @@ export default function CheckoutPage() {
                         required
                       />
                     </div>
-                    <Button className="w-full" type="button">
-                      Continue with PayPal
-                    </Button>
                   </div>
                 )}
 
@@ -304,16 +314,14 @@ export default function CheckoutPage() {
                     <div className="space-y-2">
                       <Label htmlFor="zelle-email">Zelle Email or Phone Number</Label>
                       <Input 
-                        id="zelleEmail" 
+                        id="zelleEmail"
+                        name="zelleEmail" 
                         placeholder="email@example.com or (555) 123-4567" 
                         value={paymentDetails.zelleEmail || ''}
                         onChange={handlePaymentDetailChange}
                         required
                       />
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      Please send payment to payments@luxurystore.com via Zelle
-                    </p>
                   </div>
                 )}
 
@@ -322,7 +330,8 @@ export default function CheckoutPage() {
                     <div className="space-y-2">
                       <Label htmlFor="apple-giftcard-code">Apple Gift Card Code</Label>
                       <Input 
-                        id="appleGiftCardCode" 
+                        id="appleGiftCardCode"
+                        name="appleGiftCardCode" 
                         placeholder="XXXX-XXXX-XXXX-XXXX" 
                         value={paymentDetails.appleGiftCardCode || ''}
                         onChange={handlePaymentDetailChange}
@@ -332,7 +341,8 @@ export default function CheckoutPage() {
                     <div className="space-y-2">
                       <Label htmlFor="apple-giftcard-pin">PIN (if applicable)</Label>
                       <Input 
-                        id="appleGiftCardPin" 
+                        id="appleGiftCardPin"
+                        name="appleGiftCardPin"
                         placeholder="1234" 
                         value={paymentDetails.appleGiftCardPin || ''}
                         onChange={handlePaymentDetailChange}
@@ -346,19 +356,14 @@ export default function CheckoutPage() {
                     <div className="space-y-2">
                       <Label htmlFor="venmo-handle">Venmo Username</Label>
                       <Input 
-                        id="venmoHandle" 
+                        id="venmoHandle"
+                        name="venmoHandle"
                         placeholder="@username" 
                         value={paymentDetails.venmoHandle || ''}
                         onChange={handlePaymentDetailChange}
                         required
                       />
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      Please send payment to @LuxuryStore via Venmo and include your order number
-                    </p>
-                    <Button className="w-full" type="button">
-                      Open Venmo App
-                    </Button>
                   </div>
                 )}
               </CardContent>
@@ -422,20 +427,38 @@ export default function CheckoutPage() {
                 </div>
               </CardContent>
             </Card>
-            <Button 
-              size="lg" 
-              className="w-full mt-6" 
-              type="submit"
-              disabled={cart.length === 0}
-            >
-              Place Order
-            </Button>
+
+            <div className="hidden lg:block mt-6">
+                <Button 
+                    size="lg" 
+                    className="w-full" 
+                    type="submit"
+                    disabled={cart.length === 0 || isSubmitting}
+                >
+                {isSubmitting ? 'Placing Order...' : 'Place Order'}
+                </Button>
+            </div>
             
             <div className="mt-4 text-sm text-muted-foreground text-center">
               <p>By placing your order, you agree to our Terms of Service and Privacy Policy.</p>
-              <p className="mt-2">Order details will be logged to the console for demonstration.</p>
             </div>
           </div>
+        </div>
+
+        {/* Sticky Footer for Mobile */}
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background border-t p-4 flex flex-col gap-2">
+            <div className="flex justify-between font-bold text-lg">
+                <span>Total</span>
+                <span>${total.toFixed(2)}</span>
+            </div>
+            <Button 
+                size="lg" 
+                className="w-full" 
+                type="submit"
+                disabled={cart.length === 0 || isSubmitting}
+            >
+                {isSubmitting ? 'Placing Order...' : 'Place Order'}
+            </Button>
         </div>
       </form>
     </div>

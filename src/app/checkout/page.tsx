@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -38,70 +38,75 @@ export default function CheckoutPage() {
   const taxes = subtotal * 0.08;
   const total = subtotal + shipping + taxes;
 
-  const formAction = async (formData: FormData) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (cart.length === 0 || isSubmitting) return;
+
     setIsSubmitting(true);
-    
+
+    const formData = new FormData(event.currentTarget);
+
     const customerData = {
-        name: formData.get('name') as string,
-        email: formData.get('email') as string,
-        address: formData.get('address') as string,
-        city: formData.get('city') as string,
-        state: formData.get('state') as string,
-        zip: formData.get('zip') as string,
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      address: formData.get('address') as string,
+      city: formData.get('city') as string,
+      state: formData.get('state') as string,
+      zip: formData.get('zip') as string,
     };
 
     const paymentDetailsData: PaymentDetails = {
-        cardNumber: formData.get('cardNumber')?.toString(),
-        expiryDate: formData.get('expiryDate')?.toString(),
-        cvc: formData.get('cvc')?.toString(),
-        paypalEmail: formData.get('paypalEmail')?.toString(),
-        zelleEmail: formData.get('zelleEmail')?.toString(),
-        venmoHandle: formData.get('venmoHandle')?.toString(),
-        appleGiftCardCode: formData.get('appleGiftCardCode')?.toString(),
-        appleGiftCardPin: formData.get('appleGiftCardPin')?.toString(),
+      cardNumber: formData.get('cardNumber')?.toString(),
+      expiryDate: formData.get('expiryDate')?.toString(),
+      cvc: formData.get('cvc')?.toString(),
+      paypalEmail: formData.get('paypalEmail')?.toString(),
+      zelleEmail: formData.get('zelleEmail')?.toString(),
+      venmoHandle: formData.get('venmoHandle')?.toString(),
+      appleGiftCardCode: formData.get('appleGiftCardCode')?.toString(),
+      appleGiftCardPin: formData.get('appleGiftCardPin')?.toString(),
     };
-    
+
     const orderPayload = {
-        customer: customerData,
-        items: cart.map(item => ({
-          id: item.id,
-          name: item.name,
-          quantity: item.quantity,
-          price: item.price,
-          subtotal: item.price * item.quantity,
-          imageUrl: item.image.imageUrl,
-        })),
-        summary: {
-          subtotal: subtotal.toFixed(2),
-          shipping: shipping.toFixed(2),
-          taxes: taxes.toFixed(2),
-          total: total.toFixed(2),
-        },
-        payment: {
-            method: paymentMethod,
-            details: paymentDetailsData,
-        }
+      customer: customerData,
+      items: cart.map(item => ({
+        id: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        subtotal: item.price * item.quantity,
+        imageUrl: item.image.imageUrl,
+      })),
+      summary: {
+        subtotal: subtotal.toFixed(2),
+        shipping: shipping.toFixed(2),
+        taxes: taxes.toFixed(2),
+        total: total.toFixed(2),
+      },
+      payment: {
+        method: paymentMethod,
+        details: paymentDetailsData,
+      },
     };
 
     try {
-        await handlePlaceOrder(orderPayload);
-        toast({
-            title: "Order Placed!",
-            description: "Thank you for your purchase. A confirmation email has been sent.",
-        });
-        // Clear cart after successful order
-        cart.forEach(item => removeFromCart(item.id, true)); // pass true to suppress toast
-        router.push('/');
-
+      await handlePlaceOrder(orderPayload);
+      toast({
+        title: "Order Placed!",
+        description: "Thank you for your purchase. A confirmation email has been sent.",
+      });
+      // Clear cart after successful order
+      cart.forEach(item => removeFromCart(item.id, true)); // pass true to suppress toast
+      router.push('/');
     } catch (error) {
-        console.error("Failed to place order:", error);
-        toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            description: "Could not place your order. Please try again.",
-        });
+      console.error("Failed to place order:", error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Could not place your order. Please try again.",
+      });
     } finally {
-        setIsSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -115,7 +120,7 @@ export default function CheckoutPage() {
         </p>
       </div>
 
-      <form action={formAction}>
+      <form onSubmit={handleSubmit}>
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact and Payment Info */}
           <div className="space-y-8">

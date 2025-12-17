@@ -59,7 +59,7 @@ export default function Header() {
           <div className="flex items-center gap-2">
             <ProductSearch />
             <ThemeToggle />
-            <Button variant="ghost" size="icon" onClick={() => setWishlistOpen(true)}>
+            <Button className="relative" variant="ghost" size="icon" onClick={() => setWishlistOpen(true)}>
               <Heart className="h-5 w-5" />
               {wishlist.length > 0 && (
                 <Badge key={`wishlist-${wishlist.length}`} variant="destructive" className="absolute top-1 right-1 h-4 w-4 justify-center p-0 text-xs">
@@ -68,7 +68,7 @@ export default function Header() {
               )}
               <span className="sr-only">Wishlist</span>
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => setCartOpen(true)}>
+            <Button className="relative" variant="ghost" size="icon" onClick={() => setCartOpen(true)}>
               <ShoppingCart className="h-5 w-5" />
               {totalCartItems > 0 && (
                 <Badge key={`cart-${totalCartItems}`} variant="destructive" className="absolute top-1 right-1 h-4 w-4 justify-center p-0 text-xs">
@@ -83,6 +83,8 @@ export default function Header() {
                     Checkout
                 </Link>
              </Button>
+
+
             <Sheet open={isMobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="md:hidden">

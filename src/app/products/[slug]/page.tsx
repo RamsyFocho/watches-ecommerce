@@ -15,14 +15,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!product) {
     return {
       title: "Product Not Found",
+      description: "The product you are looking for does not exist.",
     };
   }
 
   return {
-    title: `${product.name} | CelestialGems`,
-    description: product.description,
+    title: `Buy ${product.name} | ${product.brand}`,
+    description: `Purchase the ${product.name}. ${product.description} Available now at CelestialGems with secure checkout and fast shipping.`,
+    keywords: product.keywords,
     openGraph: {
-        images: [product.image.imageUrl],
+        title: `Buy ${product.name} | CelestialGems`,
+        description: `Official retailer for ${product.brand}. ${product.description}`,
+        images: [
+          {
+            url: product.image,
+            width: 800,
+            height: 800,
+            alt: `Image of ${product.name}`,
+          },
+        ],
+        siteName: 'CelestialGems',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `Buy ${product.name}`,
+      description: product.description,
+      images: [product.image],
     },
   };
 }
@@ -47,7 +65,6 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           <Image
             src={product.image}
             alt={product.name}
-            data-ai-hint={product.name}
             fill
             className="object-cover"
             priority

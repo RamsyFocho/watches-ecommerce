@@ -26,6 +26,7 @@ export const products: Product[] = [
     isTrending: true,
     brand: 'Rolex',
     modelType: 'Professional',
+    keywords: ['dive watch', 'luxury', 'swiss made', 'waterproof', 'submariner'],
   },
   {
     id: '13',
@@ -39,6 +40,7 @@ export const products: Product[] = [
     isTrending: true,
     brand: 'Rolex',
     modelType: 'Professional',
+    keywords: ['chronograph', 'racing', 'motorsport', 'daytona', 'luxury'],
   },
   {
     id: '12',
@@ -52,6 +54,7 @@ export const products: Product[] = [
     isTrending: false,
     brand: 'Rolex',
     modelType: 'Professional',
+    keywords: ['gmt', 'travel', 'pilot watch', 'dual time', 'swiss'],
   },
   {
     id: '18',
@@ -65,6 +68,7 @@ export const products: Product[] = [
     isTrending: true,
     brand: 'Rolex',
     modelType: 'Classic',
+    keywords: ['classic watch', 'dress watch', 'datejust', 'timeless', 'luxury'],
   },
   {
     id: '19',
@@ -78,6 +82,7 @@ export const products: Product[] = [
     isTrending: true,
     brand: 'Rolex',
     modelType: 'Classic',
+    keywords: ['president watch', 'day-date', 'prestige', 'gold watch', 'luxury'],
   },
   {
     id: '16',
@@ -91,6 +96,7 @@ export const products: Product[] = [
     isTrending: false,
     brand: 'Rolex',
     modelType: 'Professional',
+    keywords: ['sailing', 'nautical', 'yachting', 'regatta', 'sports watch'],
   },
    {
     id: '17',
@@ -104,6 +110,7 @@ export const products: Product[] = [
     isTrending: false,
     brand: 'Rolex',
     modelType: 'Professional',
+    keywords: ['annual calendar', 'gmt', 'travel watch', 'complex', 'luxury'],
   },
   {
     id: '21',
@@ -117,6 +124,7 @@ export const products: Product[] = [
     isTrending: false,
     brand: 'Rolex',
     modelType: 'Classic',
+    keywords: ['entry-level rolex', 'classic design', 'oyster perpetual', 'simple', 'elegant'],
   },
   {
     id: '14',
@@ -130,6 +138,7 @@ export const products: Product[] = [
     isTrending: false,
     brand: 'Rolex',
     modelType: 'Professional',
+    keywords: ['adventure', 'mountaineering', 'explorer', 'rugged', 'tool watch'],
   },
   {
     id: '11',
@@ -143,6 +152,7 @@ export const products: Product[] = [
     isTrending: false,
     brand: 'Rolex',
     modelType: 'Professional',
+    keywords: ['deep sea', 'saturation diving', 'helium escape valve', 'sea-dweller', 'professional diver'],
   },
   {
     id: '23',
@@ -156,6 +166,7 @@ export const products: Product[] = [
     isTrending: true,
     brand: 'Rolex',
     modelType: 'Professional',
+    keywords: ['pepsi bezel', 'gmt-master ii', 'collectors watch', 'travel', 'iconic'],
   },
   {
     id: '24',
@@ -169,6 +180,7 @@ export const products: Product[] = [
     isTrending: false,
     brand: 'Rolex',
     modelType: 'Professional',
+    keywords: ['green submariner', 'hulk', 'cerachrom', 'collectible', 'bold design'],
   },
   {
     id: '25',
@@ -182,6 +194,7 @@ export const products: Product[] = [
     isTrending: true,
     brand: 'Rolex',
     modelType: 'Professional',
+    keywords: ['tiffany blue', 'rare', 'collectors item', 'daytona', 'limited edition'],
   },
   {
     id: '26',
@@ -195,6 +208,7 @@ export const products: Product[] = [
     isTrending: true,
     brand: 'Rolex',
     modelType: 'Professional',
+    keywords: ['le mans', 'special edition', 'racing chronograph', 'daytona', 'anniversary'],
   },
 
   // Omega

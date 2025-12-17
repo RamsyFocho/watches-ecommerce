@@ -37,11 +37,11 @@ export default function WishlistSheet({ open, onOpenChange }: WishlistSheetProps
                   <div key={item.id} className="flex items-start gap-4">
                     <div className="relative h-20 w-20 rounded-md overflow-hidden">
                       <Image
-                        src={item.image.imageUrl}
+                        src={item.image}
                         alt={item.name}
-                        data-ai-hint={item.image.imageHint}
                         fill
                         className="object-cover"
+                        sizes="80px"
                       />
                     </div>
                     <div className="flex-1">
@@ -51,6 +51,7 @@ export default function WishlistSheet({ open, onOpenChange }: WishlistSheetProps
                     </div>
                     <Button variant="ghost" size="icon" onClick={() => removeFromWishlist(item.id)}>
                       <X className="h-4 w-4" />
+                      <span className="sr-only">Remove from wishlist</span>
                     </Button>
                   </div>
                 ))

@@ -21,14 +21,14 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <Card className="h-full flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl">
       <CardHeader className="p-0">
-        <Link href={`/products/${product.slug}`} className="block group">
+        <Link href={`/products/${product.slug}`} className="block group" title={`View details for ${product.name}`}>
           <div className="relative aspect-square w-full overflow-hidden">
             <Image
               src={product.image}
               alt={product.name}
-              data-ai-hint={product.name}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           </div>
         </Link>

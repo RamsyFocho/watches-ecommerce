@@ -7,8 +7,9 @@ import { Mail, Phone, MapPin } from "lucide-react";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Contact Us | CelestialGems',
-  description: 'Get in touch with CelestialGems for inquiries and support.',
+  title: 'Contact Us',
+  description: 'Get in touch with CelestialGems for inquiries, support, and feedback. We are here to help you with your luxury watch questions.',
+  keywords: ['contact celestialgems', 'watch support', 'jewelry inquiry', 'customer service'],
 };
 
 export default function ContactPage() {
@@ -31,11 +32,11 @@ export default function ContactPage() {
             <form className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
-                <Input id="name" placeholder="Enter your name" />
+                <Input id="name" placeholder="Enter your name" autoComplete="name" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
-                <Input id="email" type="email" placeholder="Enter your email" />
+                <Input id="email" type="email" placeholder="Enter your email" autoComplete="email" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="message">Message</Label>
@@ -55,7 +56,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                         <h3 className="font-semibold text-lg">Email</h3>
-                        <p className="text-muted-foreground">support@celestialgems.com</p>
+                        <a href="mailto:support@celestialgems.com" className="text-muted-foreground hover:text-primary">support@celestialgems.com</a>
                     </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -64,7 +65,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                         <h3 className="font-semibold text-lg">Phone</h3>
-                        <p className="text-muted-foreground">(123) 456-7890</p>
+                        <a href="tel:123-456-7890" className="text-muted-foreground hover:text-primary">(123) 456-7890</a>
                     </div>
                 </div>
                 <div className="flex items-start gap-4">

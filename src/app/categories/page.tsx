@@ -6,8 +6,9 @@ import type { Metadata } from 'next';
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: 'Product Categories | CelestialGems',
-  description: 'Explore our collection of fine jewelry by category and brand.',
+  title: 'Watch Categories & Brands',
+  description: 'Explore our collection of fine watches by category (Swiss, Japanese) and by brand. Find the perfect timepiece that matches your style.',
+  keywords: ['watch categories', 'swiss watches', 'japanese watches', 'luxury brands', 'shop by brand'],
 };
 
 export default function CategoriesPage() {
@@ -42,7 +43,7 @@ export default function CategoriesPage() {
               {brands
                 .filter((brand) => brand.category === category.name)
                 .map((brand) => (
-                  <Link key={brand.name} href={`/brands/${brand.slug}`} className="group block">
+                  <Link key={brand.name} href={`/brands/${brand.slug}`} className="group block" title={`Explore ${brand.name} watches`}>
                     <Card className="overflow-hidden h-full flex flex-col justify-center items-center text-center transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:-translate-y-2">
                        <CardHeader>
                         <CardTitle className="text-2xl font-headline text-foreground">

@@ -12,12 +12,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!brand) {
     return {
       title: "Brand Not Found",
+      description: "The watch brand you are looking for could not be found.",
     };
   }
 
   return {
-    title: `${brand.name} | CelestialGems`,
-    description: `Explore our collection of ${brand.name} watches.`,
+    title: `Shop ${brand.name} Watches`,
+    description: `Explore our exclusive collection of ${brand.name} watches. Find timeless elegance and cutting-edge design from ${brand.name} at CelestialGems.`,
+    keywords: [brand.name, `${brand.name} watches`, 'luxury watches', 'buy watches', brand.category],
   };
 }
 

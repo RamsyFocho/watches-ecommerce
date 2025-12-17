@@ -8,11 +8,11 @@ export type Product = {
   description: string;
   longDescription: string;
   price: number;
-  // image: (typeof PlaceHolderImages)[number];
   image: string;
   isTrending: boolean;
   brand: string;
   modelType?: 'Professional' | 'Classic';
+  keywords?: string[];
 };
 
 export type CartItem = Product & {

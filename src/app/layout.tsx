@@ -7,8 +7,12 @@ import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeProvider";
 
 export const metadata: Metadata = {
-  title: "CelestialGems",
-  description: "Discover Timeless Elegance in Every Piece",
+  title: {
+    default: "CelestialGems | Premium & Luxury Watches",
+    template: "%s | CelestialGems",
+  },
+  description: "Discover timeless elegance with CelestialGems. Explore our curated collection of luxury Swiss, Japanese, and designer watches. Find your perfect timepiece today.",
+  keywords: ["luxury watches", "designer watches", "Swiss watches", "Japanese watches", "Rolex", "Omega", "Patek Philippe", "buy watches online"],
 };
 
 export default function RootLayout({

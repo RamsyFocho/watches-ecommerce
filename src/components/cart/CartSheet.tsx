@@ -56,9 +56,9 @@ export default function CartSheet({ open, onOpenChange }: CartSheetProps) {
                       <Image
                         src={item.image}
                         alt={item.name}
-                        data-ai-hint={item.name}
                         fill
                         className="object-cover"
+                        sizes="96px"
                       />
                     </div>
                     <div className="flex-1">
@@ -90,6 +90,7 @@ export default function CartSheet({ open, onOpenChange }: CartSheetProps) {
                        </p>
                        <Button variant="ghost" size="icon" onClick={() => removeFromCart(item.id)}>
                         <X className="h-5 w-5" />
+                        <span className="sr-only">Remove item</span>
                       </Button>
                     </div>
                   </div>

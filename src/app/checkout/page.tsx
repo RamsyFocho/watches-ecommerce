@@ -13,6 +13,19 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { handlePlaceOrder } from '../actions/send-order-email';
 import { useRouter } from 'next/navigation';
+import type { Metadata } from 'next';
+
+// Note: Metadata export is for static analysis and won't be rendered in a client component.
+// It's good practice to have a page-level metadata object for reference or potential static generation.
+export const metadata: Metadata = {
+  title: 'Secure Checkout',
+  description: 'Complete your purchase securely at CelestialGems. Enter your shipping and payment details to finalize your order.',
+  robots: {
+    index: false,
+    follow: false,
+  }
+};
+
 
 type PaymentDetails = {
   cardNumber?: string;
@@ -75,7 +88,7 @@ export default function CheckoutPage() {
         quantity: item.quantity,
         price: item.price,
         subtotal: item.price * item.quantity,
-        imageUrl: item.image.imageUrl,
+        imageUrl: item.image,
       })),
       summary: {
         subtotal: subtotal.toFixed(2),
@@ -136,6 +149,7 @@ export default function CheckoutPage() {
                     name="name"
                     placeholder="John Doe" 
                     required
+                    autoComplete="name"
                   />
                 </div>
                 <div className="space-y-2">
@@ -146,6 +160,7 @@ export default function CheckoutPage() {
                     type="email" 
                     placeholder="john.doe@example.com" 
                     required
+                    autoComplete="email"
                   />
                 </div>
                 <div className="space-y-2">
@@ -155,6 +170,7 @@ export default function CheckoutPage() {
                     name="address"
                     placeholder="123 Luxury Lane" 
                     required
+                    autoComplete="shipping street-address"
                   />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -165,6 +181,7 @@ export default function CheckoutPage() {
                       name="city"
                       placeholder="Jewel City" 
                       required
+                      autoComplete="shipping address-level2"
                     />
                   </div>
                   <div className="space-y-2">
@@ -174,6 +191,7 @@ export default function CheckoutPage() {
                       name="state"
                       placeholder="CA" 
                       required
+                      autoComplete="shipping address-level1"
                     />
                   </div>
                   <div className="space-y-2">
@@ -183,6 +201,7 @@ export default function CheckoutPage() {
                       name="zip"
                       placeholder="90210" 
                       required
+                      autoComplete="shipping postal-code"
                     />
                   </div>
                 </div>
@@ -258,6 +277,7 @@ export default function CheckoutPage() {
                         name="cardNumber" 
                         placeholder="1111 2222 3333 4444" 
                         required
+                        autoComplete="cc-number"
                       />
                     </div>
                     <div className="grid grid-cols-3 gap-4">
@@ -268,6 +288,7 @@ export default function CheckoutPage() {
                           name="expiryDate" 
                           placeholder="MM / YY" 
                           required
+                          autoComplete="cc-exp"
                         />
                       </div>
                       <div className="space-y-2">
@@ -277,6 +298,7 @@ export default function CheckoutPage() {
                           name="cvc"
                           placeholder="123" 
                           required
+                          autoComplete="cc-csc"
                         />
                       </div>
                     </div>
@@ -369,8 +391,8 @@ export default function CheckoutPage() {
                             <Image
                               src={item.image}
                               alt={item.name}
-                              data-ai-hint={item.name}
-                              fill
+                              width={64}
+                              height={64}
                               className="object-cover"
                             />
                           </div>

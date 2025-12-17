@@ -71,7 +71,7 @@ export default function Header() {
             <Button className="relative" variant="ghost" size="icon" onClick={() => setCartOpen(true)}>
               <ShoppingCart className="h-5 w-5" />
               {totalCartItems > 0 && (
-                <Badge key={`cart-${totalCartItems}`} variant="destructive" className="absolute top-1 right-1 h-4 w-4 justify-center p-0 text-xs">
+                <Badge key={`cart-${totalCartItems}`} variant="destructive" className="absolute top-2 right-2 h-4 w-4 justify-center p-0 text-xs">
                   {totalCartItems}
                 </Badge>
               )}

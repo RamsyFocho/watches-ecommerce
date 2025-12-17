@@ -24,9 +24,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         <Link href={`/products/${product.slug}`} className="block group">
           <div className="relative aspect-square w-full overflow-hidden">
             <Image
-              src={product.image.imageUrl}
+              src={product.image}
               alt={product.name}
-              data-ai-hint={product.image.imageHint}
+              data-ai-hint={product.name}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />

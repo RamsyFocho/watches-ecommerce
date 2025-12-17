@@ -54,9 +54,9 @@ export default function CartSheet({ open, onOpenChange }: CartSheetProps) {
                   <div key={item.id} className="flex items-start gap-4">
                     <div className="relative h-24 w-24 rounded-md overflow-hidden">
                       <Image
-                        src={item.image.imageUrl}
+                        src={item.image}
                         alt={item.name}
-                        data-ai-hint={item.image.imageHint}
+                        data-ai-hint={item.name}
                         fill
                         className="object-cover"
                       />

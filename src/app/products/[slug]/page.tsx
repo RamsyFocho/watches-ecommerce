@@ -45,9 +45,9 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
       <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-start">
         <div className="aspect-square w-full relative rounded-lg overflow-hidden shadow-lg">
           <Image
-            src={product.image.imageUrl}
+            src={product.image}
             alt={product.name}
-            data-ai-hint={product.image.imageHint}
+            data-ai-hint={product.name}
             fill
             className="object-cover"
             priority

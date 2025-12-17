@@ -367,9 +367,9 @@ export default function CheckoutPage() {
                         <div className="flex items-center gap-4">
                           <div className="relative h-16 w-16 rounded-md overflow-hidden">
                             <Image
-                              src={item.image.imageUrl}
+                              src={item.image}
                               alt={item.name}
-                              data-ai-hint={item.image.imageHint}
+                              data-ai-hint={item.name}
                               fill
                               className="object-cover"
                             />

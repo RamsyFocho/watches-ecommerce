@@ -35,7 +35,7 @@ export default function Header() {
     <>
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 pl-4">
             <Link href="/" className="flex items-center gap-2">
               <Gem className="h-6 w-6 text-primary" />
               <span className="font-bold font-headline text-lg hidden sm:inline-block">
@@ -62,7 +62,7 @@ export default function Header() {
             <Button className="relative" variant="ghost" size="icon" onClick={() => setWishlistOpen(true)}>
               <Heart className="h-5 w-5" />
               {wishlist.length > 0 && (
-                <Badge key={`wishlist-${wishlist.length}`} variant="destructive" className="absolute top-1 right-1 h-4 w-4 justify-center p-0 text-xs">
+                <Badge key={`wishlist-${wishlist.length}`} variant="destructive" className="absolute -top-1 right-2 h-4 w-4 justify-center p-0 text-xs">
                   {wishlist.length}
                 </Badge>
               )}
@@ -71,7 +71,7 @@ export default function Header() {
             <Button className="relative" variant="ghost" size="icon" onClick={() => setCartOpen(true)}>
               <ShoppingCart className="h-5 w-5" />
               {totalCartItems > 0 && (
-                <Badge key={`cart-${totalCartItems}`} variant="destructive" className="absolute -top-2 -right-2 h-4 w-4 justify-center p-0 text-xs">
+                <Badge key={`cart-${totalCartItems}`} variant="destructive" className="absolute -top-1 -right-2 h-4 w-4 justify-center p-0 text-xs">
                   {totalCartItems}
                 </Badge>
               )}

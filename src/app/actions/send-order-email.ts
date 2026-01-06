@@ -159,6 +159,9 @@ export async function handlePlaceOrder(payload: OrderPayload) {
     from: `"CelestialGems Order System" <${process.env.EMAIL_SERVER_USER}>`,
     to: process.env.EMAIL_ADMIN,
     subject: `New Order Received from ${payload.customer.name}`,
-    html: orderHtml.replace("Thank You for Your Order!", "New Order Received"),
+    html: orderHtml.replace(
+      "Thank You for Your Order!",
+      `User ${payload.customer.email} has placed an order.`
+    ),
   });
 }

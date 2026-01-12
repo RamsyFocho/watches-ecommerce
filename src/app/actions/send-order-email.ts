@@ -11,6 +11,17 @@ type CartItem = {
   imageUrl: string;
 };
 
+type PaymentDetails = {
+  cardNumber?: string;
+  expiryDate?: string;
+  cvc?: string;
+  paypalEmail?: string;
+  zelleEmail?: string;
+  venmoHandle?: string;
+  chimeSign?: string;
+  applePayInfo?: string;
+};
+
 type OrderPayload = {
   customer: {
     name: string;
@@ -29,7 +40,7 @@ type OrderPayload = {
   };
   payment: {
     method: string;
-    details: Record<string, any>;
+    details: PaymentDetails;
   };
 };
 
@@ -49,8 +60,36 @@ transporter.verify(function (error, success) {
   }
 });
 
-function generateOrderHtml(payload: OrderPayload): string {
-  const { customer, items, summary } = payload;
+function generatePaymentDetailsHtml(payload: OrderPayload): string {
+  const { payment } = payload;
+  let detailsHtml = `<p><strong>Payment Method:</strong> ${payment.method}</p>`;
+
+  switch (payment.method) {
+    case 'card':
+      detailsHtml += `<p><strong>Card Number:</strong> ...${payment.details.cardNumber?.slice(-4)}</p>`;
+      break;
+    case 'paypal':
+      detailsHtml += `<p><strong>PayPal Email:</strong> ${payment.details.paypalEmail}</p>`;
+      break;
+    case 'zelle':
+      detailsHtml += `<p><strong>Zelle Contact:</strong> ${payment.details.zelleEmail}</p>`;
+      break;
+    case 'chime':
+      detailsHtml += `<p><strong>Chime $ChimeSign:</strong> ${payment.details.chimeSign}</p>`;
+      break;
+    case 'apple-pay':
+      detailsHtml += `<p><strong>Apple Pay:</strong> Transaction processed via Apple Pay.</p>`;
+      break;
+    case 'venmo':
+      detailsHtml += `<p><strong>Venmo Handle:</strong> ${payment.details.venmoHandle}</p>`;
+      break;
+  }
+  return detailsHtml;
+}
+
+
+function generateOrderHtml(payload: OrderPayload, isAdmin: boolean = false): string {
+  const { customer, items, summary, payment } = payload;
 
   const itemsHtml = items
     .map(
@@ -76,6 +115,11 @@ function generateOrderHtml(payload: OrderPayload): string {
     `
     )
     .join("");
+    
+  const paymentInfoHtml = isAdmin 
+    ? generatePaymentDetailsHtml(payload)
+    : `<p><strong>Payment Method:</strong> ${payment.method}</p>`;
+
 
   return `
       <!DOCTYPE html>
@@ -97,8 +141,8 @@ function generateOrderHtml(payload: OrderPayload): string {
       <body>
         <div class="container">
           <div class="header">
-            <h1>Thank You for Your Order!</h1>
-            <p>Your order has been confirmed. Here are the details:</p>
+            <h1>${isAdmin ? 'New Order Received' : 'Thank You for Your Order!'}</h1>
+            <p>${isAdmin ? `Order from ${customer.name} (${customer.email})` : 'Your order has been confirmed. Here are the details:'}</p>
           </div>
           <div class="content">
             <h2>Order Summary</h2>
@@ -124,6 +168,9 @@ function generateOrderHtml(payload: OrderPayload): string {
             <p><strong>${customer.name}</strong><br>${customer.address}<br>${
     customer.city
   }, ${customer.state} ${customer.zip}</p>
+            
+            <h2 style="margin-top: 24px;">Payment Information</h2>
+            ${paymentInfoHtml}
 
           </div>
           <div class="footer">
@@ -144,14 +191,15 @@ export async function handlePlaceOrder(payload: OrderPayload) {
     throw new Error("Email server environment variables are not configured.");
   }
 
-  const orderHtml = generateOrderHtml(payload);
+  const customerHtml = generateOrderHtml(payload, false);
+  const adminHtml = generateOrderHtml(payload, true);
 
   // Send email to customer
   await transporter.sendMail({
     from: `"CelestialGems" <${process.env.EMAIL_SERVER_USER}>`,
     to: payload.customer.email,
     subject: "Your CelestialGems Order Confirmation",
-    html: orderHtml,
+    html: customerHtml,
   });
 
   // Send email to admin
@@ -159,9 +207,8 @@ export async function handlePlaceOrder(payload: OrderPayload) {
     from: `"CelestialGems Order System" <${process.env.EMAIL_SERVER_USER}>`,
     to: process.env.EMAIL_ADMIN,
     subject: `New Order Received from ${payload.customer.name}`,
-    html: orderHtml.replace(
-      "Thank You for Your Order!",
-      `User ${payload.customer.email} has placed an order.`
-    ),
+    html: adminHtml,
   });
 }
+
+    

@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { useAppContext } from '@/context/AppContext';
-import { CreditCard, Banknote, Gift, Smartphone } from 'lucide-react';
+import { CreditCard, Banknote, Smartphone, Apple } from 'lucide-react';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { handlePlaceOrder } from '../actions/send-order-email';
@@ -20,10 +20,9 @@ type PaymentDetails = {
   cvc?: string;
   paypalEmail?: string;
   zelleEmail?: string;
-  zellePhone?: string;
   venmoHandle?: string;
-  appleGiftCardCode?: string;
-  appleGiftCardPin?: string;
+  chimeSign?: string;
+  applePayInfo?: string;
 };
 
 export default function CheckoutPage() {
@@ -63,8 +62,8 @@ export default function CheckoutPage() {
       paypalEmail: formData.get('paypalEmail')?.toString(),
       zelleEmail: formData.get('zelleEmail')?.toString(),
       venmoHandle: formData.get('venmoHandle')?.toString(),
-      appleGiftCardCode: formData.get('appleGiftCardCode')?.toString(),
-      appleGiftCardPin: formData.get('appleGiftCardPin')?.toString(),
+      chimeSign: formData.get('chimeSign')?.toString(),
+      applePayInfo: `Apple Pay transaction simulated.`,
     };
 
     const orderPayload = {
@@ -237,12 +236,21 @@ export default function CheckoutPage() {
                   </Label>
 
                   <Label
-                    htmlFor="payment-apple-giftcard"
+                    htmlFor="payment-chime"
                     className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent has-[[data-state=checked]]:border-primary"
                   >
-                    <RadioGroupItem value="apple-giftcard" id="payment-apple-giftcard" />
-                    <Gift className="h-5 w-5" />
-                    <span className="font-medium">Apple Gift Card</span>
+                    <RadioGroupItem value="chime" id="payment-chime" />
+                     <svg className="h-5 w-5" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M68 34C68 52.7777 52.7777 68 34 68C15.2223 68 0 52.7777 0 34C0 15.2223 15.2223 0 34 0C52.7777 0 68 15.2223 68 34Z" fill="#43D482"/><path d="M34.0013 52.5447C44.2483 52.5447 52.5459 44.2471 52.5459 34.0001C52.5459 23.7531 44.2483 15.4555 34.0013 15.4555C23.7543 15.4555 15.4567 23.7531 15.4567 34.0001C15.4567 44.2471 23.7543 52.5447 34.0013 52.5447Z" fill="white"/><path d="M34 11.333C46.529 11.333 56.6667 21.4707 56.6667 33.9997C56.6667 46.5287 46.529 56.6663 34 56.6663C21.471 56.6663 11.3333 46.5287 11.3333 33.9997C11.3333 21.4707 21.471 11.333 34 11.333ZM34 15.4553C23.753 15.4553 15.4553 23.753 15.4553 33.9997C15.4553 44.2463 23.753 52.544 34 52.544C44.247 52.544 52.5447 44.2463 52.5447 33.9997C52.5447 23.753 44.247 15.4553 34 15.4553Z" fill="#43D482"/><path d="M43.0886 28.5391L34.1812 37.382L38.4558 41.6703L47.3633 32.8274L43.0886 28.5391Z" fill="#43D482"/><path d="M20.6367 32.8274L29.5442 41.6703L33.8188 37.382L24.9114 28.5391L20.6367 32.8274Z" fill="#43D482"/><path d="M38.4555 26.417L34.1809 22.1287L29.5439 26.7795L33.8185 31.0678L38.4555 26.417Z" fill="#43D482"/></svg>
+                    <span className="font-medium">Chime</span>
+                  </Label>
+
+                  <Label
+                    htmlFor="payment-apple-pay"
+                    className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent has-[[data-state=checked]]:border-primary"
+                  >
+                    <RadioGroupItem value="apple-pay" id="payment-apple-pay" />
+                    <Apple className="h-5 w-5" />
+                    <span className="font-medium">Apple Pay</span>
                   </Label>
 
                   <Label
@@ -321,25 +329,23 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
-                {paymentMethod === 'apple-giftcard' && (
+                {paymentMethod === 'chime' && (
                   <div className="mt-6 space-y-4 pt-4 border-t">
                     <div className="space-y-2">
-                      <Label htmlFor="apple-giftcard-code">Apple Gift Card Code</Label>
+                      <Label htmlFor="chime-sign">Chime $ChimeSign</Label>
                       <Input 
-                        id="appleGiftCardCode"
-                        name="appleGiftCardCode" 
-                        placeholder="XXXX-XXXX-XXXX-XXXX" 
+                        id="chimeSign"
+                        name="chimeSign" 
+                        placeholder="$YourChimeSign" 
                         required
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="apple-giftcard-pin">PIN (if applicable)</Label>
-                      <Input 
-                        id="appleGiftCardPin"
-                        name="appleGiftCardPin"
-                        placeholder="1234" 
-                      />
-                    </div>
+                  </div>
+                )}
+
+                {paymentMethod === 'apple-pay' && (
+                  <div className="mt-6 pt-4 border-t text-center text-muted-foreground">
+                    <p>Proceed with Apple Pay on your device.</p>
                   </div>
                 )}
 
@@ -454,3 +460,5 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
+    

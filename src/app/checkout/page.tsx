@@ -13,19 +13,6 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { handlePlaceOrder } from '../actions/send-order-email';
 import { useRouter } from 'next/navigation';
-import type { Metadata } from 'next';
-
-// Note: Metadata export is for static analysis and won't be rendered in a client component.
-// It's good practice to have a page-level metadata object for reference or potential static generation.
-export const metadata: Metadata = {
-  title: 'Secure Checkout',
-  description: 'Complete your purchase securely at CelestialGems. Enter your shipping and payment details to finalize your order.',
-  robots: {
-    index: false,
-    follow: false,
-  }
-};
-
 
 type PaymentDetails = {
   cardNumber?: string;

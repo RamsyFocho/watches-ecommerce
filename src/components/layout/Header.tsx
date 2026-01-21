@@ -77,12 +77,6 @@ export default function Header() {
               )}
               <span className="sr-only">Cart</span>
             </Button>
-             <Button asChild size="sm" className="hidden sm:flex">
-                <Link href="/checkout">
-                    <CreditCard className="mr-2 h-4 w-4"/>
-                    Checkout
-                </Link>
-             </Button>
 
 
             <Sheet open={isMobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -110,13 +104,6 @@ export default function Header() {
                       {link.label}
                     </Link>
                   ))}
-                   <Separator />
-                    <Button asChild size="sm" onClick={() => setMobileMenuOpen(false)}>
-                        <Link href="/checkout">
-                            <CreditCard className="mr-2 h-4 w-4"/>
-                            Checkout
-                        </Link>
-                    </Button>
                 </div>
               </SheetContent>
             </Sheet>

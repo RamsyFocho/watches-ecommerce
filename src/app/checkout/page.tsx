@@ -29,7 +29,7 @@ export default function CheckoutPage() {
   const { cart, removeFromCart } = useAppContext();
   const { toast } = useToast();
   const router = useRouter();
-  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [paymentMethod, setPaymentMethod] = useState('paypal');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -206,6 +206,7 @@ export default function CheckoutPage() {
                   className="space-y-4"
                   name="paymentMethod"
                 >
+                  {/*
                   <Label
                     htmlFor="payment-card"
                     className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent has-[[data-state=checked]]:border-primary"
@@ -214,6 +215,7 @@ export default function CheckoutPage() {
                     <CreditCard className="h-5 w-5" />
                     <span className="font-medium">Credit Card</span>
                   </Label>
+                  */}
 
                   <Label
                     htmlFor="payment-paypal"
@@ -226,6 +228,7 @@ export default function CheckoutPage() {
                     <span className="font-medium">PayPal</span>
                   </Label>
 
+                  {/*
                   <Label
                     htmlFor="payment-zelle"
                     className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent has-[[data-state=checked]]:border-primary"
@@ -234,6 +237,7 @@ export default function CheckoutPage() {
                     <Banknote className="h-5 w-5" />
                     <span className="font-medium">Zelle</span>
                   </Label>
+                  */}
 
                   <Label
                     htmlFor="payment-chime"
@@ -253,6 +257,7 @@ export default function CheckoutPage() {
                     <span className="font-medium">Apple Pay</span>
                   </Label>
 
+                  {/*
                   <Label
                     htmlFor="payment-venmo"
                     className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent has-[[data-state=checked]]:border-primary"
@@ -261,8 +266,10 @@ export default function CheckoutPage() {
                     <Smartphone className="h-5 w-5" />
                     <span className="font-medium">Venmo</span>
                   </Label>
+                  */}
                 </RadioGroup>
-
+                
+                {/*
                 {paymentMethod === 'card' && (
                   <div className="mt-6 space-y-4 pt-4 border-t">
                     <div className="space-y-2">
@@ -299,6 +306,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                 )}
+                */}
 
                 {paymentMethod === 'paypal' && (
                   <div className="mt-6 space-y-4 pt-4 border-t">
@@ -314,7 +322,8 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                 )}
-
+                
+                {/*
                 {paymentMethod === 'zelle' && (
                   <div className="mt-6 space-y-4 pt-4 border-t">
                     <div className="space-y-2">
@@ -328,6 +337,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                 )}
+                */}
 
                 {paymentMethod === 'chime' && (
                   <div className="mt-6 space-y-4 pt-4 border-t">
@@ -348,7 +358,8 @@ export default function CheckoutPage() {
                     <p>Proceed with Apple Pay on your device.</p>
                   </div>
                 )}
-
+                
+                {/*
                 {paymentMethod === 'venmo' && (
                   <div className="mt-6 space-y-4 pt-4 border-t">
                     <div className="space-y-2">
@@ -362,6 +373,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                 )}
+                */}
               </CardContent>
             </Card>
           </div>
@@ -460,5 +472,3 @@ export default function CheckoutPage() {
     </div>
   );
 }
-
-    
